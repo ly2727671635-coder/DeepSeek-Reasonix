@@ -1714,6 +1714,8 @@ function AppInner({
     });
   });
 
+  // Mouse wheel scrolling is always active — it's the primary scroll
+  // mechanism on Windows where native terminal scrollback is unavailable.
   useKeystroke((ev) => {
     if (ev.paste || modalOpen) return;
     if (ev.mouseScrollUp) {
@@ -1724,6 +1726,11 @@ function AppInner({
       chatScroll.scrollWheelDown();
       return;
     }
+  });
+
+  // PgUp / PgDn / End only active in app-managed scroll mode.
+  useKeystroke((ev) => {
+    if (ev.paste || modalOpen) return;
     if (ev.pageUp && (busy || input.length === 0)) {
       chatScroll.scrollPageUp();
       return;

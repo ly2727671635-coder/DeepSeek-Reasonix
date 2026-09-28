@@ -16,8 +16,11 @@ export function resolveHistoryScrollMode({
   if (configured === "native") return "native";
   if (configured === "app") return "app";
   if (isKnownJumpProneTerminal(env)) return "app";
+  // Windows classic console (cmd.exe / conhost PowerShell) has no native
+  // scrollback in alt-screen mode; use app-managed scrolling so the mouse
+  // wheel, selection, and right-click copy all work.
   if (platform === "win32" && env.TERM_PROGRAM === undefined && env.MSYSTEM === undefined) {
-    return "native";
+    return "app";
   }
   return "native";
 }
